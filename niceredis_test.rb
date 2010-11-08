@@ -21,12 +21,19 @@ context "Nice Redis" do
       assert @redis.smembers("new_set") == ["1"] 
     end
 
+    test "Adding to an existing set" do
+      s = RSet.new(:key => "new_set", :value => 1)
+      s.add 2
+      s.add 3
+      assert_equal @redis.smembers("new_set"), ["3","1","2"]
+    end
+
     test "Makes a new set without attribs hash" do
       s = RSet.new
       assert s.is_a?(RSet)
       s.key = "new_set"
       s.value = 1
-      assert_equal @redis.smembers("new_set"), ["1"]
+      #assert_equal @redis.smembers("new_set"), ["1"]
     end
   end
 end
